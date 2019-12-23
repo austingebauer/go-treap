@@ -220,6 +220,46 @@ func TestTreap_Search(t *testing.T) {
 		want   bool
 	}{
 		{
+			name: "search for value in empty treap",
+			fields: fields{
+				root: nil,
+			},
+			args: args{
+				value: "h",
+			},
+			want: false,
+		},
+		{
+			name: "search for value in single value treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: nil,
+					right: nil,
+				},
+			},
+			args: args{
+				value: "h",
+			},
+			want: false,
+		},
+		{
+			name: "search for value in single value treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: nil,
+					right: nil,
+				},
+			},
+			args: args{
+				value: "f",
+			},
+			want: true,
+		},
+		{
 			name: "search for value in the treap",
 			fields: fields{
 				root: &node{

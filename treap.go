@@ -21,8 +21,24 @@ func NewTreap() *Treap {
 }
 
 func (t *Treap) Search(value string) bool {
-	// TODO: Not implemented
-	return true
+	if t.root == nil {
+		return false
+	}
+
+	c := t.root
+	for c != nil {
+		if value == c.value {
+			return true
+		}
+
+		if value < c.value {
+			c = c.left
+		} else {
+			c = c.right
+		}
+	}
+
+	return false
 }
 
 func (t *Treap) Insert(value string) {
