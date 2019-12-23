@@ -51,14 +51,10 @@ func TestTreap_Delete(t *testing.T) {
 						left: &node{
 							value:    "c",
 							priority: 2,
-							left:     nil,
-							right:    nil,
 						},
 						right: &node{
 							value:    "e",
 							priority: 1,
-							left:     nil,
-							right:    nil,
 						},
 					},
 					right: &node{
@@ -67,14 +63,10 @@ func TestTreap_Delete(t *testing.T) {
 						left: &node{
 							value:    "h",
 							priority: 3,
-							left:     nil,
-							right:    nil,
 						},
 						right: &node{
 							value:    "x",
 							priority: 6,
-							left:     nil,
-							right:    nil,
 						},
 					},
 				},
@@ -135,14 +127,10 @@ func TestTreap_Insert(t *testing.T) {
 						left: &node{
 							value:    "c",
 							priority: 2,
-							left:     nil,
-							right:    nil,
 						},
 						right: &node{
 							value:    "e",
 							priority: 1,
-							left:     nil,
-							right:    nil,
 						},
 					},
 					right: &node{
@@ -151,14 +139,10 @@ func TestTreap_Insert(t *testing.T) {
 						left: &node{
 							value:    "h",
 							priority: 3,
-							left:     nil,
-							right:    nil,
 						},
 						right: &node{
 							value:    "x",
 							priority: 6,
-							left:     nil,
-							right:    nil,
 						},
 					},
 				},
@@ -176,14 +160,10 @@ func TestTreap_Insert(t *testing.T) {
 					left: &node{
 						value:    "c",
 						priority: 2,
-						left:     nil,
-						right:    nil,
 					},
 					right: &node{
 						value:    "e",
 						priority: 1,
-						left:     nil,
-						right:    nil,
 					},
 				},
 				right: &node{
@@ -196,15 +176,11 @@ func TestTreap_Insert(t *testing.T) {
 						right: &node{
 							value:    "k",
 							priority: 5,
-							left:     nil,
-							right:    nil,
 						},
 					},
 					right: &node{
 						value:    "x",
 						priority: 6,
-						left:     nil,
-						right:    nil,
 					},
 				},
 			},
@@ -251,8 +227,6 @@ func TestTreap_Search(t *testing.T) {
 				root: &node{
 					value:    "f",
 					priority: 10,
-					left:     nil,
-					right:    nil,
 				},
 			},
 			args: args{
@@ -266,8 +240,6 @@ func TestTreap_Search(t *testing.T) {
 				root: &node{
 					value:    "f",
 					priority: 10,
-					left:     nil,
-					right:    nil,
 				},
 			},
 			args: args{
@@ -287,14 +259,10 @@ func TestTreap_Search(t *testing.T) {
 						left: &node{
 							value:    "c",
 							priority: 2,
-							left:     nil,
-							right:    nil,
 						},
 						right: &node{
 							value:    "e",
 							priority: 1,
-							left:     nil,
-							right:    nil,
 						},
 					},
 					right: &node{
@@ -303,14 +271,10 @@ func TestTreap_Search(t *testing.T) {
 						left: &node{
 							value:    "h",
 							priority: 3,
-							left:     nil,
-							right:    nil,
 						},
 						right: &node{
 							value:    "x",
 							priority: 6,
-							left:     nil,
-							right:    nil,
 						},
 					},
 				},
@@ -332,14 +296,10 @@ func TestTreap_Search(t *testing.T) {
 						left: &node{
 							value:    "c",
 							priority: 2,
-							left:     nil,
-							right:    nil,
 						},
 						right: &node{
 							value:    "e",
 							priority: 1,
-							left:     nil,
-							right:    nil,
 						},
 					},
 					right: &node{
@@ -348,14 +308,10 @@ func TestTreap_Search(t *testing.T) {
 						left: &node{
 							value:    "h",
 							priority: 3,
-							left:     nil,
-							right:    nil,
 						},
 						right: &node{
 							value:    "x",
 							priority: 6,
-							left:     nil,
-							right:    nil,
 						},
 					},
 				},
@@ -372,6 +328,139 @@ func TestTreap_Search(t *testing.T) {
 				root: tt.fields.root,
 			}
 			assert.Equal(t, tt.want, trp.Search(tt.args.value))
+		})
+	}
+}
+
+func Test_rotateRight(t *testing.T) {
+	type args struct {
+		root *node
+	}
+	tests := []struct {
+		name string
+		args args
+		want *node
+	}{
+		{
+			name: "rotate tree right",
+			args: args{
+				root: &node{
+					value:    "5",
+					priority: 10,
+					right: &node{
+						value:    "7",
+						priority: 9,
+					},
+					left: &node{
+						value:    "3",
+						priority: 8,
+						right: &node{
+							value:    "4",
+							priority: 5,
+						},
+						left: &node{
+							value:    "2",
+							priority: 3,
+						},
+					},
+				},
+			},
+			want: &node{
+				value:    "3",
+				priority: 8,
+				right: &node{
+					value:    "5",
+					priority: 10,
+					right: &node{
+						value:    "7",
+						priority: 9,
+					},
+					left: &node{
+						value:    "4",
+						priority: 5,
+					},
+				},
+				left: &node{
+					value:    "2",
+					priority: 3,
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pivot := tt.args.root.left
+			rotateRight(tt.args.root, pivot)
+
+			// assert pivot is the new root after the rotation
+			assert.Equal(t, tt.want, pivot)
+		})
+	}
+}
+
+func Test_rotateLeft(t *testing.T) {
+	type args struct {
+		root  *node
+		pivot *node
+	}
+	tests := []struct {
+		name string
+		args args
+		want *node
+	}{
+		{
+			name: "rotate tree left",
+			args: args{
+				root: &node{
+					value:    "3",
+					priority: 8,
+					right: &node{
+						value:    "5",
+						priority: 10,
+						right: &node{
+							value:    "7",
+							priority: 9,
+						},
+						left: &node{
+							value:    "4",
+							priority: 5,
+						},
+					},
+					left: &node{
+						value:    "2",
+						priority: 3,
+					},
+				},
+			},
+			want: &node{
+				value:    "5",
+				priority: 10,
+				right: &node{
+					value:    "7",
+					priority: 9,
+				},
+				left: &node{
+					value:    "3",
+					priority: 8,
+					right: &node{
+						value:    "4",
+						priority: 5,
+					},
+					left: &node{
+						value:    "2",
+						priority: 3,
+					},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			pivot := tt.args.root.right
+			rotateLeft(tt.args.root, pivot)
+
+			// assert pivot is the new root after the rotation
+			assert.Equal(t, tt.want, pivot)
 		})
 	}
 }

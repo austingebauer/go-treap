@@ -67,30 +67,29 @@ func (t *Treap) insert(value string, priority uint64) {
 	}
 
 	// binary search to insert value
-	c := t.root
-	var cParent *node
-	for c != nil {
-		if value == c.value {
+	var current, parent *node = t.root, nil
+	for current != nil {
+		if value == current.value {
 			// value is already in tree
 			return
 		}
 
-		if value < c.value {
-			if c.left == nil {
-				cParent = c
-				cParent.left = n
+		if value < current.value {
+			if current.left == nil {
+				parent = current
+				parent.left = n
 				break
 			}
 
-			c = c.left
+			current = current.left
 		} else {
-			if c.right == nil {
-				cParent = c
-				cParent.right = n
+			if current.right == nil {
+				parent = current
+				parent.right = n
 				break
 			}
 
-			c = c.right
+			current = current.right
 		}
 	}
 
@@ -100,4 +99,16 @@ func (t *Treap) insert(value string, priority uint64) {
 // Delete delete the given value from the Treap.
 func (t *Treap) Delete(value string) {
 	// TODO: Not implemented
+}
+
+// rotateRight
+func rotateRight(root, pivot *node) {
+	root.left = pivot.right
+	pivot.right = root
+}
+
+// rotateLeft
+func rotateLeft(root, pivot *node) {
+	root.right = pivot.left
+	pivot.left = root
 }
