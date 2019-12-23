@@ -100,7 +100,8 @@ func TestTreap_Insert(t *testing.T) {
 		root *node
 	}
 	type args struct {
-		value string
+		value    string
+		priority uint64
 	}
 	tests := []struct {
 		name   string
@@ -108,6 +109,20 @@ func TestTreap_Insert(t *testing.T) {
 		args   args
 		want   *node
 	}{
+		{
+			name: "insert value into an empty treap",
+			fields: fields{
+				root: nil,
+			},
+			args: args{
+				value:    "h",
+				priority: 100,
+			},
+			want: &node{
+				value:    "h",
+				priority: 100,
+			},
+		},
 		{
 			name: "insert value into the treap",
 			fields: fields{
@@ -149,7 +164,8 @@ func TestTreap_Insert(t *testing.T) {
 				},
 			},
 			args: args{
-				value: "k",
+				value:    "k",
+				priority: 5,
 			},
 			want: &node{
 				value:    "f",
@@ -174,15 +190,15 @@ func TestTreap_Insert(t *testing.T) {
 					value:    "t",
 					priority: 7,
 					left: &node{
-						value:    "k",
-						priority: 5,
-						left: &node{
-							value:    "h",
-							priority: 3,
+						value:    "h",
+						priority: 3,
+						left:     nil,
+						right: &node{
+							value:    "k",
+							priority: 5,
 							left:     nil,
 							right:    nil,
 						},
-						right: nil,
 					},
 					right: &node{
 						value:    "x",
@@ -199,7 +215,7 @@ func TestTreap_Insert(t *testing.T) {
 			trp := &Treap{
 				root: tt.fields.root,
 			}
-			trp.Insert(tt.args.value)
+			trp.insert(tt.args.value, tt.args.priority)
 			assert.True(t, trp.Search(tt.args.value))
 			assert.Equal(t, tt.want, trp.root)
 		})
@@ -235,8 +251,8 @@ func TestTreap_Search(t *testing.T) {
 				root: &node{
 					value:    "f",
 					priority: 10,
-					left: nil,
-					right: nil,
+					left:     nil,
+					right:    nil,
 				},
 			},
 			args: args{
@@ -250,8 +266,8 @@ func TestTreap_Search(t *testing.T) {
 				root: &node{
 					value:    "f",
 					priority: 10,
-					left: nil,
-					right: nil,
+					left:     nil,
+					right:    nil,
 				},
 			},
 			args: args{
