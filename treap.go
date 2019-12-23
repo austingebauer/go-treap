@@ -66,37 +66,7 @@ func (t *Treap) insert(value string, priority uint64) {
 		return
 	}
 
-	// binary search to insert value
-	var pivot, root *node = t.root, nil
-	for pivot != nil {
-		if value == pivot.value {
-			// value is already in tree
-			return
-		}
-
-		if value < pivot.value {
-			if pivot.left == nil {
-				root = pivot
-				root.left = n
-				break
-			}
-
-			pivot = pivot.left
-		} else {
-			if pivot.right == nil {
-				root = pivot
-				root.right = n
-				break
-			}
-
-			pivot = pivot.right
-		}
-	}
-
-	// do tree rotations until the priorities are in the right order
-	for root.priority < pivot.priority {
-		rotateLeft(root, pivot)
-	}
+	// TODO: Not implemented
 }
 
 // Delete delete the given value from the Treap.
