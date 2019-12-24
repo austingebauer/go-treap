@@ -51,22 +51,31 @@ func (t *Treap) Search(value string) bool {
 // Insert inserts the given value into the Treap.
 func (t *Treap) Insert(value string) {
 	rand.Seed(time.Now().UnixNano())
-	t.insert(value, rand.Uint64())
+	t.root = insert(t.root, value, rand.Uint64())
 }
 
 // insert inserts a node with the passed value and priority into the Treap.
-func (t *Treap) insert(value string, priority uint64) {
-	n := &node{
-		value:    value,
-		priority: priority,
+func insert(root *node, value string, priority uint64) *node {
+	if root == nil {
+		return &node{
+			value:    value,
+			priority: priority,
+		}
 	}
 
-	if t.root == nil {
-		t.root = n
-		return
+	if value < root.value {
+		root.left = insert(root.left, value, priority)
+		if root.priority < root.left.priority {
+			root = rotateRight(root, root.left)
+		}
+	} else {
+		root.right = insert(root.right, value, priority)
+		if root.priority < root.right.priority {
+			root = rotateLeft(root, root.right)
+		}
 	}
 
-	// TODO: Not implemented
+	return root
 }
 
 // Delete delete the given value from the Treap.
@@ -74,14 +83,20 @@ func (t *Treap) Delete(value string) {
 	// TODO: Not implemented
 }
 
-// rotateRight
-func rotateRight(root, pivot *node) {
+// rotateRight does a tree rotation to the right given the passed root and pivot.
+// After the rotation, the root will be the right child of the pivot.
+// The pivot will be returned.
+func rotateRight(root, pivot *node) *node {
 	root.left = pivot.right
 	pivot.right = root
+	return pivot
 }
 
-// rotateLeft
-func rotateLeft(root, pivot *node) {
+// rotateLeft does a tree rotation to the left given the passed root and pivot.
+// After the rotation, the root will be the left child of the pivot.
+// The pivot will be returned.
+func rotateLeft(root, pivot *node) *node {
 	root.right = pivot.left
 	pivot.left = root
+	return pivot
 }

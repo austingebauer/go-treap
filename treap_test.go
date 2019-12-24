@@ -12,12 +12,7 @@ func TestNewTreap(t *testing.T) {
 	}{
 		{
 			name: "new treap",
-			want: &Treap{
-				root: &node{
-					value:    "",
-					priority: 0,
-				},
-			},
+			want: &Treap{},
 		},
 	}
 	for _, tt := range tests {
@@ -170,12 +165,11 @@ func TestTreap_Insert(t *testing.T) {
 					value:    "t",
 					priority: 7,
 					left: &node{
-						value:    "h",
-						priority: 3,
-						left:     nil,
-						right: &node{
-							value:    "k",
-							priority: 5,
+						value:    "k",
+						priority: 5,
+						left: &node{
+							value:    "h",
+							priority: 3,
 						},
 					},
 					right: &node{
@@ -191,9 +185,9 @@ func TestTreap_Insert(t *testing.T) {
 			trp := &Treap{
 				root: tt.fields.root,
 			}
-			trp.insert(tt.args.value, tt.args.priority)
-			assert.True(t, trp.Search(tt.args.value))
+			trp.root = insert(trp.root, tt.args.value, tt.args.priority)
 			assert.Equal(t, tt.want, trp.root)
+			assert.True(t, trp.Search(tt.args.value))
 		})
 	}
 }
@@ -389,11 +383,8 @@ func Test_rotateRight(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pivot := tt.args.root.left
-			rotateRight(tt.args.root, pivot)
-
-			// assert pivot is the new root after the rotation
-			assert.Equal(t, tt.want, pivot)
+			// assert returned value is the new root after the rotation
+			assert.Equal(t, tt.want, rotateRight(tt.args.root, tt.args.root.left))
 		})
 	}
 }
@@ -456,11 +447,8 @@ func Test_rotateLeft(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			pivot := tt.args.root.right
-			rotateLeft(tt.args.root, pivot)
-
-			// assert pivot is the new root after the rotation
-			assert.Equal(t, tt.want, pivot)
+			// assert returned value is the new root after the rotation
+			assert.Equal(t, tt.want, rotateLeft(tt.args.root, tt.args.root.right))
 		})
 	}
 }
