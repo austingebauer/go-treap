@@ -1,4 +1,4 @@
-// Package Treap provides a balanced binary search tree
+// Package treap provides a balanced binary search tree
 // by using binary heap properties and randomization.
 package treap
 
