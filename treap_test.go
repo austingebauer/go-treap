@@ -2,6 +2,7 @@ package treap
 
 import (
 	"github.com/stretchr/testify/assert"
+	"reflect"
 	"testing"
 )
 
@@ -88,7 +89,7 @@ func TestTreap_Insert(t *testing.T) {
 	}
 	type args struct {
 		value    string
-		priority uint64
+		priority int64
 	}
 	tests := []struct {
 		name   string
@@ -449,6 +450,27 @@ func Test_rotateLeft(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// assert returned value is the new root after the rotation
 			assert.Equal(t, tt.want, rotateLeft(tt.args.root, tt.args.root.right))
+		})
+	}
+}
+
+func Test_binarySearch(t *testing.T) {
+	type args struct {
+		n     *node
+		value string
+	}
+	tests := []struct {
+		name string
+		args args
+		want *node
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := binarySearch(tt.args.n, tt.args.value); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("binarySearch() = %v, want %v", got, tt.want)
+			}
 		})
 	}
 }

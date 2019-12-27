@@ -9,8 +9,11 @@ import (
 )
 
 const (
-	maxPriority    = math.MaxInt64
-	minPriority    = 1
+	// Random priorities in the Treap will be in the range of [1, MaxInt64].
+	maxPriority = math.MaxInt64
+	minPriority = 1
+
+	// The priority given to Treap nodes during deletion.
 	deletePriority = 0
 )
 
@@ -22,7 +25,7 @@ type Treap struct {
 // node represents a value and its priority in a Treap.
 type node struct {
 	value    string
-	priority uint64
+	priority int64
 	left     *node
 	right    *node
 }
@@ -39,30 +42,18 @@ func (t *Treap) Search(value string) bool {
 		return false
 	}
 
-	c := t.root
-	for c != nil {
-		if value == c.value {
-			return true
-		}
-
-		if value < c.value {
-			c = c.left
-		} else {
-			c = c.right
-		}
-	}
-
-	return false
+	return binarySearch(t.root, value) != nil
 }
 
 // Insert inserts the given value into the Treap.
 func (t *Treap) Insert(value string) {
 	rand.Seed(time.Now().UnixNano())
-	t.root = insert(t.root, value, rand.Uint64())
+	t.root = insert(t.root, value,
+		rand.Int63n(maxPriority-minPriority)+minPriority)
 }
 
 // insert inserts a node with the passed value and priority into the Treap.
-func insert(root *node, value string, priority uint64) *node {
+func insert(root *node, value string, priority int64) *node {
 	if root == nil {
 		return &node{
 			value:    value,
@@ -88,6 +79,26 @@ func insert(root *node, value string, priority uint64) *node {
 // Delete delete the given value from the Treap.
 func (t *Treap) Delete(value string) {
 	// TODO: Not implemented
+}
+
+// binarySearch performs a binary search starting from the
+// passed node for the passed value.
+// If the passed value is found, a pointer to the node with
+// the value is returned. Otherwise, nil is returned.
+func binarySearch(n *node, value string) *node {
+	for n != nil {
+		if value == n.value {
+			return n
+		}
+
+		if value < n.value {
+			n = n.left
+		} else {
+			n = n.right
+		}
+	}
+
+	return nil
 }
 
 // rotateRight does a tree rotation to the right given the passed root and pivot.
