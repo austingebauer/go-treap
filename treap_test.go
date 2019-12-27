@@ -22,65 +22,65 @@ func TestNewTreap(t *testing.T) {
 	}
 }
 
-func TestTreap_Delete(t *testing.T) {
-	type fields struct {
-		root *node
-	}
-	type args struct {
-		value string
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-	}{
-		{
-			name: "delete value from the treap",
-			fields: fields{
-				root: &node{
-					value:    "f",
-					priority: 10,
-					left: &node{
-						value:    "d",
-						priority: 8,
-						left: &node{
-							value:    "c",
-							priority: 2,
-						},
-						right: &node{
-							value:    "e",
-							priority: 1,
-						},
-					},
-					right: &node{
-						value:    "t",
-						priority: 7,
-						left: &node{
-							value:    "h",
-							priority: 3,
-						},
-						right: &node{
-							value:    "x",
-							priority: 6,
-						},
-					},
-				},
-			},
-			args: args{
-				value: "d",
-			},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			trp := &Treap{
-				root: tt.fields.root,
-			}
-			trp.Delete(tt.args.value)
-			assert.False(t, trp.Search(tt.args.value))
-		})
-	}
-}
+//func TestTreap_Delete(t *testing.T) {
+//	type fields struct {
+//		root *node
+//	}
+//	type args struct {
+//		value string
+//	}
+//	tests := []struct {
+//		name   string
+//		fields fields
+//		args   args
+//	}{
+//		{
+//			name: "delete value from the treap",
+//			fields: fields{
+//				root: &node{
+//					value:    "f",
+//					priority: 10,
+//					left: &node{
+//						value:    "d",
+//						priority: 8,
+//						left: &node{
+//							value:    "c",
+//							priority: 2,
+//						},
+//						right: &node{
+//							value:    "e",
+//							priority: 1,
+//						},
+//					},
+//					right: &node{
+//						value:    "t",
+//						priority: 7,
+//						left: &node{
+//							value:    "h",
+//							priority: 3,
+//						},
+//						right: &node{
+//							value:    "x",
+//							priority: 6,
+//						},
+//					},
+//				},
+//			},
+//			args: args{
+//				value: "d",
+//			},
+//		},
+//	}
+//	for _, tt := range tests {
+//		t.Run(tt.name, func(t *testing.T) {
+//			trp := &Treap{
+//				root: tt.fields.root,
+//			}
+//			trp.Delete(tt.args.value)
+//			assert.False(t, trp.Search(tt.args.value))
+//		})
+//	}
+//}
 
 func TestTreap_Insert(t *testing.T) {
 	type fields struct {

@@ -3,8 +3,15 @@
 package treap
 
 import (
+	"math"
 	"math/rand"
 	"time"
+)
+
+const (
+	maxPriority    = math.MaxInt64
+	minPriority    = 1
+	deletePriority = 0
 )
 
 // Treap is a balanced binary search tree.
