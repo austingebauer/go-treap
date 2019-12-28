@@ -76,35 +76,41 @@ func insert(n *node, value string, priority int64) *node {
 	return n
 }
 
-// Delete delete the given value from the Treap.
+// Delete deletes the given value from the Treap.
 func (t *Treap) Delete(value string) {
-	/*
-		n := binarySearch(t.root, value)
-
-		// if not found, there is nothing to delete
-		if n == nil {
-			return
-		}
-
-		// set the priority on the node to delete
-		n.priority = deletePriority
-	*/
-
 	t.root = delete(t.root, value)
 }
 
+// delete finds and deletes the node with the given value from the Treap.
 func delete(n *node, value string) *node {
 	if n == nil {
+		return nil
+	}
+
+	// delete the node with value after it's been rotated down to a leaf
+	if n.left == nil && n.right == nil && n.value == value {
 		return nil
 	}
 
 	if n.value == value {
 		n.priority = deletePriority
 
-		if n.right.priority > n.left.priority {
-
+		if n.right == nil && n.left != nil {
+			pivot := rotateRight(n, n.left)
+			pivot.right = delete(n, value)
+			return pivot
+		} else if n.left == nil && n.right != nil {
+			pivot := rotateLeft(n, n.right)
+			pivot.left = delete(n, value)
+			return pivot
+		} else if n.right.priority > n.left.priority {
+			pivot := rotateLeft(n, n.right)
+			pivot.left = delete(n, value)
+			return pivot
 		} else {
-
+			pivot := rotateRight(n, n.left)
+			pivot.right = delete(n, value)
+			return pivot
 		}
 	}
 

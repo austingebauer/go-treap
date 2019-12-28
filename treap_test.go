@@ -2,7 +2,6 @@ package treap
 
 import (
 	"github.com/stretchr/testify/assert"
-	"reflect"
 	"testing"
 )
 
@@ -34,6 +33,7 @@ func TestTreap_Delete(t *testing.T) {
 		name   string
 		fields fields
 		args   args
+		want   *node
 	}{
 		{
 			name: "delete value from the treap",
@@ -70,12 +70,66 @@ func TestTreap_Delete(t *testing.T) {
 			args: args{
 				value: "t",
 			},
+			want: &node{
+				value:    "f",
+				priority: 10,
+				left: &node{
+					value:    "d",
+					priority: 8,
+					left: &node{
+						value:    "c",
+						priority: 2,
+					},
+					right: &node{
+						value:    "e",
+						priority: 1,
+					},
+				},
+				right: &node{
+					value:    "x",
+					priority: 6,
+					left: &node{
+						value:    "h",
+						priority: 3,
+					},
+				},
+			},
+		},
+		{
+			name: "delete value from the treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+				},
+			},
+			args: args{
+				value: "f",
+			},
+			want: nil,
+		},
+		{
+			name: "delete value from the treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+				},
+			},
+			args: args{
+				value: "z",
+			},
+			want: &node{
+				value:    "f",
+				priority: 10,
+			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			trp := Treap{}
 			trp.root = delete(tt.fields.root, tt.args.value)
+			assert.Equal(t, tt.want, trp.root)
 			assert.False(t, trp.Search(tt.args.value))
 		})
 	}
@@ -462,13 +516,100 @@ func Test_binarySearch(t *testing.T) {
 		args args
 		want *node
 	}{
-		// TODO: Add test cases.
+		{
+			name: "binary search for value",
+			args: args{
+				n: &node{
+					value: "abc",
+				},
+				value: "abc",
+			},
+			want: &node{
+				value: "abc",
+			},
+		},
+		{
+			name: "binary search for value in root of tree",
+			args: args{
+				n: &node{
+					value: "b",
+					right: &node{
+						value: "c",
+					},
+					left: &node{
+						value: "a",
+					},
+				},
+				value: "b",
+			},
+			want: &node{
+				value: "b",
+				right: &node{
+					value: "c",
+				},
+				left: &node{
+					value: "a",
+				},
+			},
+		},
+		{
+			name: "binary search for value on right of tree",
+			args: args{
+				n: &node{
+					value: "b",
+					right: &node{
+						value: "c",
+					},
+					left: &node{
+						value: "a",
+					},
+				},
+				value: "c",
+			},
+			want: &node{
+				value: "c",
+			},
+		},
+		{
+			name: "binary search for value on left of tree",
+			args: args{
+				n: &node{
+					value: "b",
+					right: &node{
+						value: "c",
+					},
+					left: &node{
+						value: "a",
+					},
+				},
+				value: "a",
+			},
+			want: &node{
+				value: "a",
+			},
+		},
+		{
+			name: "binary search for value not in tree",
+			args: args{
+				n: &node{
+					value: "abcd",
+				},
+				value: "abc",
+			},
+			want: nil,
+		},
+		{
+			name: "binary search for value in empty tree",
+			args: args{
+				n:     nil,
+				value: "z",
+			},
+			want: nil,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := binarySearch(tt.args.n, tt.args.value); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("binarySearch() = %v, want %v", got, tt.want)
-			}
+			assert.Equal(t, tt.want, binarySearch(tt.args.n, tt.args.value))
 		})
 	}
 }

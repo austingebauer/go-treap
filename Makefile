@@ -5,7 +5,7 @@
 BUILD_OUT_DIR = bin
 TEST_COVERAGE_PROFILE = coverage.out
 
-all: out fmt vet test_v loc build
+all: out fmt vet test_v loc
 
 out:
 	mkdir -p $(BUILD_OUT_DIR)
