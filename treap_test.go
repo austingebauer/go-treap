@@ -245,6 +245,14 @@ func TestTreap_Insert(t *testing.T) {
 	}
 }
 
+func BenchmarkInsert(b *testing.B) {
+	alpha := "stuabcdevwxyzklmnofghijpqr"
+	trp := NewTreap()
+	for i := 0; i < b.N; i++ {
+		trp.Insert(string(alpha[i % 26]))
+	}
+}
+
 func TestTreap_Search(t *testing.T) {
 	type fields struct {
 		root *node
