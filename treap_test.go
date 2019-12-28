@@ -22,6 +22,458 @@ func TestNewTreap(t *testing.T) {
 	}
 }
 
+func TestTreap_Search(t *testing.T) {
+	type fields struct {
+		root *node
+	}
+	type args struct {
+		value string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   bool
+	}{
+		{
+			name: "search for value in empty treap",
+			fields: fields{
+				root: nil,
+			},
+			args: args{
+				value: "h",
+			},
+			want: false,
+		},
+		{
+			name: "search for non-existing value in single value treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+				},
+			},
+			args: args{
+				value: "h",
+			},
+			want: false,
+		},
+		{
+			name: "search for existing value in single value treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+				},
+			},
+			args: args{
+				value: "f",
+			},
+			want: true,
+		},
+		{
+			name: "search for existing value in populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "h",
+			},
+			want: true,
+		},
+		{
+			name: "search for nonexistent value in populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "z",
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t1 *testing.T) {
+			trp := &Treap{
+				root: tt.fields.root,
+			}
+			assert.Equal(t, tt.want, trp.Search(tt.args.value))
+		})
+	}
+}
+
+func TestTreap_Insert(t *testing.T) {
+	type fields struct {
+		root *node
+	}
+	type args struct {
+		value    string
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+	}{
+		{
+			name: "insert value into an empty treap",
+			fields: fields{
+				root: nil,
+			},
+			args: args{
+				value:    "c",
+			},
+		},
+		{
+			name: "insert value into left of treap with higher priority",
+			fields: fields{
+				root: &node{
+					value:    "c",
+					priority: 1,
+				},
+			},
+			args: args{
+				value:    "a",
+			},
+		},
+		{
+			name: "insert value into left of treap with lower priority",
+			fields: fields{
+				root: &node{
+					value:    "c",
+					priority: 2,
+				},
+			},
+			args: args{
+				value:    "a",
+			},
+		},
+		{
+			name: "insert value into right of treap with higher priority",
+			fields: fields{
+				root: &node{
+					value:    "c",
+					priority: 1,
+				},
+			},
+			args: args{
+				value:    "d",
+			},
+		},
+		{
+			name: "insert value into right of treap with lower priority",
+			fields: fields{
+				root: &node{
+					value:    "c",
+					priority: 2,
+				},
+			},
+			args: args{
+				value:    "d",
+			},
+		},
+		{
+			name: "insert value into populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value:    "k",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			trp := NewTreap()
+			trp.root = tt.fields.root
+			trp.Insert(tt.args.value)
+			assert.True(t, trp.Search(tt.args.value))
+		})
+	}
+}
+
+func TestTreap_insert(t *testing.T) {
+	type fields struct {
+		root *node
+	}
+	type args struct {
+		value    string
+		priority int64
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   *node
+	}{
+		{
+			name: "insert value into an empty treap",
+			fields: fields{
+				root: nil,
+			},
+			args: args{
+				value:    "c",
+				priority: 1,
+			},
+			want: &node{
+				value:    "c",
+				priority: 1,
+			},
+		},
+		{
+			name: "insert value into left of treap with higher priority",
+			fields: fields{
+				root: &node{
+					value:    "c",
+					priority: 1,
+				},
+			},
+			args: args{
+				value:    "a",
+				priority: 2,
+			},
+			want: &node{
+				value:    "a",
+				priority: 2,
+				right: &node{
+					value: "c",
+					priority: 1,
+				},
+			},
+		},
+		{
+			name: "insert value into left of treap with lower priority",
+			fields: fields{
+				root: &node{
+					value:    "c",
+					priority: 2,
+				},
+			},
+			args: args{
+				value:    "a",
+				priority: 1,
+			},
+			want: &node{
+				value:    "c",
+				priority: 2,
+				left: &node{
+					value: "a",
+					priority: 1,
+				},
+			},
+		},
+		{
+			name: "insert value into right of treap with higher priority",
+			fields: fields{
+				root: &node{
+					value:    "c",
+					priority: 1,
+				},
+			},
+			args: args{
+				value:    "d",
+				priority: 2,
+			},
+			want: &node{
+				value:   "d",
+				priority: 2,
+				left: &node{
+					value: "c",
+					priority: 1,
+				},
+			},
+		},
+		{
+			name: "insert value into right of treap with lower priority",
+			fields: fields{
+				root: &node{
+					value:    "c",
+					priority: 2,
+				},
+			},
+			args: args{
+				value:    "d",
+				priority: 1,
+			},
+			want: &node{
+				value:    "c",
+				priority: 2,
+				right: &node{
+					value: "d",
+					priority: 1,
+				},
+			},
+		},
+		{
+			name: "insert value into populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value:    "k",
+				priority: 5,
+			},
+			want: &node{
+				value:    "f",
+				priority: 10,
+				left: &node{
+					value:    "d",
+					priority: 8,
+					left: &node{
+						value:    "c",
+						priority: 2,
+					},
+					right: &node{
+						value:    "e",
+						priority: 1,
+					},
+				},
+				right: &node{
+					value:    "t",
+					priority: 7,
+					left: &node{
+						value:    "k",
+						priority: 5,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+					},
+					right: &node{
+						value:    "x",
+						priority: 6,
+					},
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			trp := &Treap{
+				root: tt.fields.root,
+			}
+			trp.root = insert(trp.root, tt.args.value, tt.args.priority)
+			assert.Equal(t, tt.want, trp.root)
+			assert.True(t, trp.Search(tt.args.value))
+		})
+	}
+}
+
+func BenchmarkInsert(b *testing.B) {
+	alpha := "stuabcdevwxyzklmnofghijpqr"
+	trp := NewTreap()
+	for i := 0; i < b.N; i++ {
+		trp.Insert(string(alpha[i % 26]))
+	}
+}
+
 func TestTreap_Delete(t *testing.T) {
 	type fields struct {
 		root *node
@@ -131,258 +583,6 @@ func TestTreap_Delete(t *testing.T) {
 			trp.root = delete(tt.fields.root, tt.args.value)
 			assert.Equal(t, tt.want, trp.root)
 			assert.False(t, trp.Search(tt.args.value))
-		})
-	}
-}
-
-func TestTreap_Insert(t *testing.T) {
-	type fields struct {
-		root *node
-	}
-	type args struct {
-		value    string
-		priority int64
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   *node
-	}{
-		{
-			name: "insert value into an empty treap",
-			fields: fields{
-				root: nil,
-			},
-			args: args{
-				value:    "h",
-				priority: 100,
-			},
-			want: &node{
-				value:    "h",
-				priority: 100,
-			},
-		},
-		{
-			name: "insert value into the treap",
-			fields: fields{
-				root: &node{
-					value:    "f",
-					priority: 10,
-					left: &node{
-						value:    "d",
-						priority: 8,
-						left: &node{
-							value:    "c",
-							priority: 2,
-						},
-						right: &node{
-							value:    "e",
-							priority: 1,
-						},
-					},
-					right: &node{
-						value:    "t",
-						priority: 7,
-						left: &node{
-							value:    "h",
-							priority: 3,
-						},
-						right: &node{
-							value:    "x",
-							priority: 6,
-						},
-					},
-				},
-			},
-			args: args{
-				value:    "k",
-				priority: 5,
-			},
-			want: &node{
-				value:    "f",
-				priority: 10,
-				left: &node{
-					value:    "d",
-					priority: 8,
-					left: &node{
-						value:    "c",
-						priority: 2,
-					},
-					right: &node{
-						value:    "e",
-						priority: 1,
-					},
-				},
-				right: &node{
-					value:    "t",
-					priority: 7,
-					left: &node{
-						value:    "k",
-						priority: 5,
-						left: &node{
-							value:    "h",
-							priority: 3,
-						},
-					},
-					right: &node{
-						value:    "x",
-						priority: 6,
-					},
-				},
-			},
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			trp := &Treap{
-				root: tt.fields.root,
-			}
-			trp.root = insert(trp.root, tt.args.value, tt.args.priority)
-			assert.Equal(t, tt.want, trp.root)
-			assert.True(t, trp.Search(tt.args.value))
-		})
-	}
-}
-
-func BenchmarkInsert(b *testing.B) {
-	alpha := "stuabcdevwxyzklmnofghijpqr"
-	trp := NewTreap()
-	for i := 0; i < b.N; i++ {
-		trp.Insert(string(alpha[i % 26]))
-	}
-}
-
-func TestTreap_Search(t *testing.T) {
-	type fields struct {
-		root *node
-	}
-	type args struct {
-		value string
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   bool
-	}{
-		{
-			name: "search for value in empty treap",
-			fields: fields{
-				root: nil,
-			},
-			args: args{
-				value: "h",
-			},
-			want: false,
-		},
-		{
-			name: "search for value in single value treap",
-			fields: fields{
-				root: &node{
-					value:    "f",
-					priority: 10,
-				},
-			},
-			args: args{
-				value: "h",
-			},
-			want: false,
-		},
-		{
-			name: "search for value in single value treap",
-			fields: fields{
-				root: &node{
-					value:    "f",
-					priority: 10,
-				},
-			},
-			args: args{
-				value: "f",
-			},
-			want: true,
-		},
-		{
-			name: "search for value in the treap",
-			fields: fields{
-				root: &node{
-					value:    "f",
-					priority: 10,
-					left: &node{
-						value:    "d",
-						priority: 8,
-						left: &node{
-							value:    "c",
-							priority: 2,
-						},
-						right: &node{
-							value:    "e",
-							priority: 1,
-						},
-					},
-					right: &node{
-						value:    "t",
-						priority: 7,
-						left: &node{
-							value:    "h",
-							priority: 3,
-						},
-						right: &node{
-							value:    "x",
-							priority: 6,
-						},
-					},
-				},
-			},
-			args: args{
-				value: "h",
-			},
-			want: true,
-		},
-		{
-			name: "search for nonexistent value in the treap",
-			fields: fields{
-				root: &node{
-					value:    "f",
-					priority: 10,
-					left: &node{
-						value:    "d",
-						priority: 8,
-						left: &node{
-							value:    "c",
-							priority: 2,
-						},
-						right: &node{
-							value:    "e",
-							priority: 1,
-						},
-					},
-					right: &node{
-						value:    "t",
-						priority: 7,
-						left: &node{
-							value:    "h",
-							priority: 3,
-						},
-						right: &node{
-							value:    "x",
-							priority: 6,
-						},
-					},
-				},
-			},
-			args: args{
-				value: "z",
-			},
-			want: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t1 *testing.T) {
-			trp := &Treap{
-				root: tt.fields.root,
-			}
-			assert.Equal(t, tt.want, trp.Search(tt.args.value))
 		})
 	}
 }
