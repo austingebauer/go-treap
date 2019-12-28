@@ -53,32 +53,68 @@ func (t *Treap) Insert(value string) {
 }
 
 // insert inserts a node with the passed value and priority into the Treap.
-func insert(root *node, value string, priority int64) *node {
-	if root == nil {
+func insert(n *node, value string, priority int64) *node {
+	if n == nil {
 		return &node{
 			value:    value,
 			priority: priority,
 		}
 	}
 
-	if value < root.value {
-		root.left = insert(root.left, value, priority)
-		if root.priority < root.left.priority {
-			root = rotateRight(root, root.left)
+	if value < n.value {
+		n.left = insert(n.left, value, priority)
+		if n.priority < n.left.priority {
+			n = rotateRight(n, n.left)
 		}
 	} else {
-		root.right = insert(root.right, value, priority)
-		if root.priority < root.right.priority {
-			root = rotateLeft(root, root.right)
+		n.right = insert(n.right, value, priority)
+		if n.priority < n.right.priority {
+			n = rotateLeft(n, n.right)
 		}
 	}
 
-	return root
+	return n
 }
 
 // Delete delete the given value from the Treap.
 func (t *Treap) Delete(value string) {
-	// TODO: Not implemented
+	/*
+		n := binarySearch(t.root, value)
+
+		// if not found, there is nothing to delete
+		if n == nil {
+			return
+		}
+
+		// set the priority on the node to delete
+		n.priority = deletePriority
+	*/
+
+	t.root = delete(t.root, value)
+}
+
+func delete(n *node, value string) *node {
+	if n == nil {
+		return nil
+	}
+
+	if n.value == value {
+		n.priority = deletePriority
+
+		if n.right.priority > n.left.priority {
+
+		} else {
+
+		}
+	}
+
+	if value < n.value {
+		n.left = delete(n.left, value)
+	} else {
+		n.right = delete(n.right, value)
+	}
+
+	return n
 }
 
 // binarySearch performs a binary search starting from the
