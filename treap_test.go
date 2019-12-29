@@ -481,6 +481,366 @@ func TestTreap_Delete(t *testing.T) {
 	type args struct {
 		value string
 	}
+	tests := []struct{
+		name string
+		fields fields
+		args args
+	}{
+		{
+			name: "delete value from empty treap",
+			fields: fields{
+				root: nil,
+			},
+			args: args{
+				value: "a",
+			},
+		},
+		{
+			name: "delete non-existing value from treap",
+			fields: fields{
+				root: &node{
+					value:    "d",
+					priority: 4,
+				},
+			},
+			args: args{
+				value: "a",
+			},
+		},
+		{
+			name: "delete non-existing value from treap",
+			fields: fields{
+				root: &node{
+					value:    "d",
+					priority: 4,
+				},
+			},
+			args: args{
+				value: "f",
+			},
+		},
+		{
+			name: "delete existing value from treap",
+			fields: fields{
+				root: &node{
+					value:    "d",
+					priority: 4,
+				},
+			},
+			args: args{
+				value: "d",
+			},
+		},
+		{
+			name: "delete existing value from left side of treap",
+			fields: fields{
+				root: &node{
+					value:    "d",
+					priority: 4,
+					left: &node{
+						value: "b",
+						priority: 2,
+					},
+					right: &node{
+						value: "e",
+						priority: 3,
+					},
+				},
+			},
+			args: args{
+				value: "b",
+			},
+		},
+		{
+			name: "delete existing value from right side of treap",
+			fields: fields{
+				root: &node{
+					value:    "d",
+					priority: 4,
+					left: &node{
+						value: "b",
+						priority: 2,
+					},
+					right: &node{
+						value: "e",
+						priority: 3,
+					},
+				},
+			},
+			args: args{
+				value: "e",
+			},
+		},
+		{
+			name: "delete subtree value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "t",
+			},
+		},
+		{
+			name: "delete right leaf value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "e",
+			},
+		},
+		{
+			name: "delete left leaf value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "h",
+			},
+		},
+		{
+			name: "delete root value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "f",
+			},
+		},
+		{
+			name: "delete non-existent value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "b",
+			},
+		},
+		{
+			name: "delete non-existent value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "z",
+			},
+		},
+		{
+			name: "delete non-existent value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "i",
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T){
+			trp := NewTreap()
+			trp.root = tt.fields.root
+			trp.Delete(tt.args.value)
+			assert.False(t, trp.Search(tt.args.value))
+		})
+	}
+}
+
+func TestTreap_delete(t *testing.T) {
+	type fields struct {
+		root *node
+	}
+	type args struct {
+		value string
+	}
 	tests := []struct {
 		name   string
 		fields fields
@@ -488,7 +848,118 @@ func TestTreap_Delete(t *testing.T) {
 		want   *node
 	}{
 		{
-			name: "delete value from the treap",
+			name: "delete value from empty treap",
+			fields: fields{
+				root: nil,
+			},
+			args: args{
+				value: "a",
+			},
+			want: nil,
+		},
+		{
+			name: "delete non-existing value from treap",
+			fields: fields{
+				root: &node{
+					value:    "d",
+					priority: 4,
+				},
+			},
+			args: args{
+				value: "a",
+			},
+			want: &node{
+				value:    "d",
+				priority: 4,
+			},
+		},
+		{
+			name: "delete non-existing value from treap",
+			fields: fields{
+				root: &node{
+					value:    "d",
+					priority: 4,
+				},
+			},
+			args: args{
+				value: "f",
+			},
+			want: &node{
+				value:    "d",
+				priority: 4,
+			},
+		},
+		{
+			name: "delete existing value from treap",
+			fields: fields{
+				root: &node{
+					value:    "d",
+					priority: 4,
+				},
+			},
+			args: args{
+				value: "d",
+			},
+			want: nil,
+		},
+		{
+			name: "delete existing value from left side of treap",
+			fields: fields{
+				root: &node{
+					value:    "d",
+					priority: 4,
+					left: &node{
+						value: "b",
+						priority: 2,
+					},
+					right: &node{
+						value: "e",
+						priority: 3,
+					},
+				},
+			},
+			args: args{
+				value: "b",
+			},
+			want: &node{
+				value:    "d",
+				priority: 4,
+				right: &node{
+					value: "e",
+					priority: 3,
+				},
+			},
+		},
+		{
+			name: "delete existing value from right side of treap",
+			fields: fields{
+				root: &node{
+					value:    "d",
+					priority: 4,
+					left: &node{
+						value: "b",
+						priority: 2,
+					},
+					right: &node{
+						value: "e",
+						priority: 3,
+					},
+				},
+			},
+			args: args{
+				value: "e",
+			},
+			want: &node{
+				value:    "d",
+				priority: 4,
+				left: &node{
+					value: "b",
+					priority: 2,
+				},
+			},
+		},
+		{
+			name: "delete subtree value from populated treap",
 			fields: fields{
 				root: &node{
 					value:    "f",
@@ -548,24 +1019,279 @@ func TestTreap_Delete(t *testing.T) {
 			},
 		},
 		{
-			name: "delete value from the treap",
+			name: "delete right leaf value from populated treap",
 			fields: fields{
 				root: &node{
 					value:    "f",
 					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "e",
+			},
+			want: &node{
+				value:    "f",
+				priority: 10,
+				left: &node{
+					value:    "d",
+					priority: 8,
+					left: &node{
+						value:    "c",
+						priority: 2,
+					},
+				},
+				right: &node{
+					value:    "t",
+					priority: 7,
+					left: &node{
+						value:    "h",
+						priority: 3,
+					},
+					right: &node{
+						value:    "x",
+						priority: 6,
+					},
+				},
+			},
+		},
+		{
+			name: "delete left leaf value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "h",
+			},
+			want: &node{
+				value:    "f",
+				priority: 10,
+				left: &node{
+					value:    "d",
+					priority: 8,
+					left: &node{
+						value:    "c",
+						priority: 2,
+					},
+					right: &node{
+						value:    "e",
+						priority: 1,
+					},
+				},
+				right: &node{
+					value:    "t",
+					priority: 7,
+					right: &node{
+						value:    "x",
+						priority: 6,
+					},
+				},
+			},
+		},
+		{
+			name: "delete root value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
 				},
 			},
 			args: args{
 				value: "f",
 			},
-			want: nil,
+			want: &node{
+				value:    "d",
+				priority: 8,
+				left: &node{
+					value:    "c",
+					priority: 2,
+				},
+				right: &node{
+					value:    "t",
+					priority: 7,
+					left: &node{
+						value:    "h",
+						priority: 3,
+						left: &node{
+							value: "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "x",
+						priority: 6,
+					},
+				},
+			},
 		},
 		{
-			name: "delete value from the treap",
+			name: "delete non-existent value from populated treap",
 			fields: fields{
 				root: &node{
 					value:    "f",
 					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "b",
+			},
+			want: &node{
+				value:    "f",
+				priority: 10,
+				left: &node{
+					value:    "d",
+					priority: 8,
+					left: &node{
+						value:    "c",
+						priority: 2,
+					},
+					right: &node{
+						value:    "e",
+						priority: 1,
+					},
+				},
+				right: &node{
+					value:    "t",
+					priority: 7,
+					left: &node{
+						value:    "h",
+						priority: 3,
+					},
+					right: &node{
+						value:    "x",
+						priority: 6,
+					},
+				},
+			},
+		},
+		{
+			name: "delete non-existent value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
 				},
 			},
 			args: args{
@@ -574,12 +1300,100 @@ func TestTreap_Delete(t *testing.T) {
 			want: &node{
 				value:    "f",
 				priority: 10,
+				left: &node{
+					value:    "d",
+					priority: 8,
+					left: &node{
+						value:    "c",
+						priority: 2,
+					},
+					right: &node{
+						value:    "e",
+						priority: 1,
+					},
+				},
+				right: &node{
+					value:    "t",
+					priority: 7,
+					left: &node{
+						value:    "h",
+						priority: 3,
+					},
+					right: &node{
+						value:    "x",
+						priority: 6,
+					},
+				},
+			},
+		},
+		{
+			name: "delete non-existent value from populated treap",
+			fields: fields{
+				root: &node{
+					value:    "f",
+					priority: 10,
+					left: &node{
+						value:    "d",
+						priority: 8,
+						left: &node{
+							value:    "c",
+							priority: 2,
+						},
+						right: &node{
+							value:    "e",
+							priority: 1,
+						},
+					},
+					right: &node{
+						value:    "t",
+						priority: 7,
+						left: &node{
+							value:    "h",
+							priority: 3,
+						},
+						right: &node{
+							value:    "x",
+							priority: 6,
+						},
+					},
+				},
+			},
+			args: args{
+				value: "i",
+			},
+			want: &node{
+				value:    "f",
+				priority: 10,
+				left: &node{
+					value:    "d",
+					priority: 8,
+					left: &node{
+						value:    "c",
+						priority: 2,
+					},
+					right: &node{
+						value:    "e",
+						priority: 1,
+					},
+				},
+				right: &node{
+					value:    "t",
+					priority: 7,
+					left: &node{
+						value:    "h",
+						priority: 3,
+					},
+					right: &node{
+						value:    "x",
+						priority: 6,
+					},
+				},
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			trp := Treap{}
+			trp := NewTreap()
 			trp.root = delete(tt.fields.root, tt.args.value)
 			assert.Equal(t, tt.want, trp.root)
 			assert.False(t, trp.Search(tt.args.value))
