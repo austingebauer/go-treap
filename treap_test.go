@@ -1648,7 +1648,7 @@ func TestTreapMixedOps(t *testing.T) {
 	assert.True(t, hasTreapProperties(trp.root))
 
 	// For each random string inserted
-	for k, _ := range inserted {
+	for k := range inserted {
 		// Assert that it's in the treap
 		assert.True(t, trp.Search(k))
 
