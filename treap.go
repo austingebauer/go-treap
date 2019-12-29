@@ -61,7 +61,9 @@ func insert(n *node, value string, priority int64) *node {
 		}
 	}
 
-	if value < n.value {
+	if value == n.value {
+		return n
+	} else if value < n.value {
 		n.left = insert(n.left, value, priority)
 		if n.priority < n.left.priority {
 			n = rotateRight(n, n.left)

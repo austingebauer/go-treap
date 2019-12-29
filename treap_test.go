@@ -1,9 +1,14 @@
 package treap
 
 import (
+	"bytes"
 	"github.com/stretchr/testify/assert"
+	"math/rand"
 	"testing"
+	"time"
 )
+
+const alpha = "abcdefghijklmnopqrstuvwxyz"
 
 func TestNewTreap(t *testing.T) {
 	tests := []struct {
@@ -161,7 +166,7 @@ func TestTreap_Insert(t *testing.T) {
 		root *node
 	}
 	type args struct {
-		value    string
+		value string
 	}
 	tests := []struct {
 		name   string
@@ -174,7 +179,7 @@ func TestTreap_Insert(t *testing.T) {
 				root: nil,
 			},
 			args: args{
-				value:    "c",
+				value: "c",
 			},
 		},
 		{
@@ -186,7 +191,7 @@ func TestTreap_Insert(t *testing.T) {
 				},
 			},
 			args: args{
-				value:    "a",
+				value: "a",
 			},
 		},
 		{
@@ -198,7 +203,7 @@ func TestTreap_Insert(t *testing.T) {
 				},
 			},
 			args: args{
-				value:    "a",
+				value: "a",
 			},
 		},
 		{
@@ -210,7 +215,7 @@ func TestTreap_Insert(t *testing.T) {
 				},
 			},
 			args: args{
-				value:    "d",
+				value: "d",
 			},
 		},
 		{
@@ -222,7 +227,7 @@ func TestTreap_Insert(t *testing.T) {
 				},
 			},
 			args: args{
-				value:    "d",
+				value: "d",
 			},
 		},
 		{
@@ -258,7 +263,7 @@ func TestTreap_Insert(t *testing.T) {
 				},
 			},
 			args: args{
-				value:    "k",
+				value: "k",
 			},
 		},
 	}
@@ -316,7 +321,7 @@ func TestTreap_insert(t *testing.T) {
 				value:    "a",
 				priority: 2,
 				right: &node{
-					value: "c",
+					value:    "c",
 					priority: 1,
 				},
 			},
@@ -337,7 +342,7 @@ func TestTreap_insert(t *testing.T) {
 				value:    "c",
 				priority: 2,
 				left: &node{
-					value: "a",
+					value:    "a",
 					priority: 1,
 				},
 			},
@@ -355,10 +360,10 @@ func TestTreap_insert(t *testing.T) {
 				priority: 2,
 			},
 			want: &node{
-				value:   "d",
+				value:    "d",
 				priority: 2,
 				left: &node{
-					value: "c",
+					value:    "c",
 					priority: 1,
 				},
 			},
@@ -379,7 +384,7 @@ func TestTreap_insert(t *testing.T) {
 				value:    "c",
 				priority: 2,
 				right: &node{
-					value: "d",
+					value:    "d",
 					priority: 1,
 				},
 			},
@@ -467,10 +472,9 @@ func TestTreap_insert(t *testing.T) {
 }
 
 func BenchmarkInsert(b *testing.B) {
-	alpha := "stuabcdevwxyzklmnofghijpqr"
 	trp := NewTreap()
 	for i := 0; i < b.N; i++ {
-		trp.Insert(string(alpha[i % 26]))
+		trp.Insert(string(alpha[i%len(alpha)]))
 	}
 }
 
@@ -481,10 +485,10 @@ func TestTreap_Delete(t *testing.T) {
 	type args struct {
 		value string
 	}
-	tests := []struct{
-		name string
+	tests := []struct {
+		name   string
 		fields fields
-		args args
+		args   args
 	}{
 		{
 			name: "delete value from empty treap",
@@ -538,11 +542,11 @@ func TestTreap_Delete(t *testing.T) {
 					value:    "d",
 					priority: 4,
 					left: &node{
-						value: "b",
+						value:    "b",
 						priority: 2,
 					},
 					right: &node{
-						value: "e",
+						value:    "e",
 						priority: 3,
 					},
 				},
@@ -558,11 +562,11 @@ func TestTreap_Delete(t *testing.T) {
 					value:    "d",
 					priority: 4,
 					left: &node{
-						value: "b",
+						value:    "b",
 						priority: 2,
 					},
 					right: &node{
-						value: "e",
+						value:    "e",
 						priority: 3,
 					},
 				},
@@ -825,7 +829,7 @@ func TestTreap_Delete(t *testing.T) {
 		},
 	}
 	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T){
+		t.Run(tt.name, func(t *testing.T) {
 			trp := NewTreap()
 			trp.root = tt.fields.root
 			trp.Delete(tt.args.value)
@@ -909,11 +913,11 @@ func TestTreap_delete(t *testing.T) {
 					value:    "d",
 					priority: 4,
 					left: &node{
-						value: "b",
+						value:    "b",
 						priority: 2,
 					},
 					right: &node{
-						value: "e",
+						value:    "e",
 						priority: 3,
 					},
 				},
@@ -925,7 +929,7 @@ func TestTreap_delete(t *testing.T) {
 				value:    "d",
 				priority: 4,
 				right: &node{
-					value: "e",
+					value:    "e",
 					priority: 3,
 				},
 			},
@@ -937,11 +941,11 @@ func TestTreap_delete(t *testing.T) {
 					value:    "d",
 					priority: 4,
 					left: &node{
-						value: "b",
+						value:    "b",
 						priority: 2,
 					},
 					right: &node{
-						value: "e",
+						value:    "e",
 						priority: 3,
 					},
 				},
@@ -953,7 +957,7 @@ func TestTreap_delete(t *testing.T) {
 				value:    "d",
 				priority: 4,
 				left: &node{
-					value: "b",
+					value:    "b",
 					priority: 2,
 				},
 			},
@@ -1187,7 +1191,7 @@ func TestTreap_delete(t *testing.T) {
 						value:    "h",
 						priority: 3,
 						left: &node{
-							value: "e",
+							value:    "e",
 							priority: 1,
 						},
 					},
@@ -1634,4 +1638,68 @@ func Test_binarySearch(t *testing.T) {
 			assert.Equal(t, tt.want, binarySearch(tt.args.n, tt.args.value))
 		})
 	}
+}
+
+func TestTreapMixedOps(t *testing.T) {
+	trp := NewTreap()
+
+	// Fill the treap up with random strings
+	inserted := fillTree(trp, 10000)
+	assert.True(t, hasTreapProperties(trp.root))
+
+	// For each random string inserted
+	for k, _ := range inserted {
+		// Assert that it's in the treap
+		assert.True(t, trp.Search(k))
+
+		// Delete the value from the treap
+		trp.Delete(k)
+
+		// Assert that treap properties are still true and
+		// the value is no longer in the treap
+		assert.True(t, hasTreapProperties(trp.root))
+		assert.False(t, trp.Search(k))
+	}
+
+	// Assert that all values that were inserted are now deleted
+	assert.Nil(t, trp.root)
+}
+
+func fillTree(trp *Treap, count int) map[string]bool {
+	inserted := make(map[string]bool, count)
+	for i := 0; i < count; i++ {
+		var b bytes.Buffer
+		for j := 0; j < rand.Intn(len(alpha)); j++ {
+			rand.Seed(time.Now().UnixNano())
+			b.WriteByte(alpha[rand.Intn(len(alpha))])
+		}
+
+		randStr := b.String()
+		inserted[randStr] = true
+		trp.Insert(randStr)
+	}
+
+	return inserted
+}
+
+// hasTreapProperties returns true if the passed tree has both
+// binary search tree properties and max heap properties.
+func hasTreapProperties(root *node) bool {
+	if root == nil {
+		return true
+	}
+
+	isValid := true
+	if root.left != nil &&
+		(root.left.value > root.value || root.left.priority > root.priority) {
+		isValid = false
+	}
+	if root.right != nil &&
+		(root.right.value < root.value || root.right.priority > root.priority) {
+		isValid = false
+	}
+
+	return isValid &&
+		hasTreapProperties(root.left) &&
+		hasTreapProperties(root.right)
 }
