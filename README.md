@@ -50,8 +50,8 @@ trp.Delete("a")
 
 ### Behavior
 
-For a simple explanation of the treap data structure, I recommend reading 
-[Julia Evan's Blog Post on Treaps](https://jvns.ca/blog/2017/09/09/data-structure--the-treap-/).
+I recommend reading [Julia Evan's Blog Post on Treaps](https://jvns.ca/blog/2017/09/09/data-structure--the-treap-/) 
+for a simple explanation of the treap data structure.
 
 ## Contributing
 
