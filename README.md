@@ -3,11 +3,14 @@
 A Go library that provides a balanced binary search tree 
 by using binary heap properties and randomization.
 
+The height of the treap is proportional to the logarithm of the number 
+of values inserted with high probability. This characteristic means that, 
+on average, each `Search()`, `Insert()`, or `Delete()` operation takes logarithmic 
+time to perform.  
+
 ## Installation
 
 To install `go-treap`, use `go get`.
-
-**NOTE: Example library installation**
 
 ```bash
 go get github.com/austingebauer/go-treap
@@ -21,28 +24,34 @@ import "github.com/austingebauer/go-treap"
 
 ## Usage
 
-TODO: Finish Usage Examples
-
 ### API
 
-`go-treap` [has|provides] a ... API
-
-It provides a `M1()` function that allows you to ...
-
-It provides a `M2()` function that allows you to ... 
+The `go-treap` API provides `Search()`, `Insert()`, and `Delete()` functions with 
+`O(log n)` time complexity on average.  
 
 Please refer to the [GoDoc](https://godoc.org/github.com/austingebauer/go-treap) for 
 additional API documentation of the library.
 
+**Example 1**: Basic usage
 ```go
+trp := NewTreap()
 
+trp.Insert("c")
+trp.Insert("b")
+trp.Insert("a")
+
+trp.Search("a") // true
+trp.Search("d") // false
+
+trp.Delete("b")
+trp.Delete("c")
+trp.Delete("a")
 ```
 
 ### Behavior
 
-`go-treap` will begin to ...
-
-Calls to both `M1()` and `M2()` ...
+For a simple explanation of the treap data structure, I recommend reading 
+[Julia Evan's Blog Post on Treaps](https://jvns.ca/blog/2017/09/09/data-structure--the-treap-/).
 
 ## Contributing
 
